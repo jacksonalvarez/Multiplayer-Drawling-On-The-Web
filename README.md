@@ -45,6 +45,11 @@ To host this application for free on DigitalOcean, follow these steps:
 - View available rooms and join by clicking on them.
 - When joining a room, see all previous drawings.
 
+## Troubleshooting
+
+- Ensure your server is listening on all network interfaces by using `0.0.0.0` in the server listen method.
+- Make sure your firewall settings on DigitalOcean allow traffic on port 3000.
+
 ## Technologies Used
 
 - HTML, CSS, JavaScript
