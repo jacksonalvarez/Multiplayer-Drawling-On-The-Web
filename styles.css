@@ -1270,3 +1270,178 @@ body {
         opacity: 0;
     }
 }
+
+/* Improved undo/redo button styling */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+    padding: 8px;
+    background: rgba(0, 255, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.action-buttons .btn {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.action-buttons .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+}
+
+.action-buttons .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Improved color picker layout */
+.color-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 200px;
+}
+
+.color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+    border-color: rgba(0, 255, 0, 0.6);
+}
+
+.color-option.active {
+    border-color: #00ff00;
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+}
+
+/* Add some breathing room around action buttons */
+.brush-tools>* {
+    margin-bottom: 12px;
+}
+
+/* Brush preview styles */
+.brush-preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.square-preview {
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.circle-preview {
+    background: var(--secondary);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--secondary);
+}
+
+.spray-preview {
+    background: radial-gradient(circle, var(--warning) 30%, transparent 50%);
+    background-size: 8px 8px;
+    box-shadow: 0 0 8px var(--warning);
+}
+
+.neon-preview {
+    background: var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--primary), inset 0 0 15px rgba(255, 255, 255, 0.2);
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+.eraser-preview {
+    background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+    border: 1px solid #ccc;
+}
+
+/* Brush settings section */
+.brush-settings {
+    padding: 1rem;
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+}
+
+.brush-settings label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.brush-settings input[type="range"] {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    accent-color: var(--primary);
+}
+
+.brush-settings span {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+/* Color picker section */
+.color-picker {
+    padding: 1rem;
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    border-radius: var(--radius);
+}
+
+.color-picker label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@keyframes glow-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
+    }
+
+    50% {
+        box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+    }
+}

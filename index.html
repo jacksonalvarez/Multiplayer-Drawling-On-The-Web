@@ -5,81 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PixelDraw - Multiplayer Drawing Canvas</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=123456">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
-
-    <style>
-        /* Improved undo/redo button styling */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin: 16px 0;
-            padding: 8px;
-            background: rgba(0, 255, 0, 0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 255, 0, 0.3);
-        }
-
-        .action-buttons .btn {
-            flex: 1;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .action-buttons .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
-        }
-
-        .action-buttons .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Improved color picker layout */
-        .color-options {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            max-width: 200px;
-        }
-
-        .color-option {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-            border-color: rgba(0, 255, 0, 0.6);
-        }
-
-        .color-option.active {
-            border-color: #00ff00;
-            transform: scale(1.15);
-            box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
-        }
-
-        /* Add some breathing room around action buttons */
-        .brush-tools>* {
-            margin-bottom: 12px;
-        }
-    </style>
 </head>
 
 <body>
