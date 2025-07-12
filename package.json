@@ -1,0 +1,16 @@
+{
+  "name": "multiplayer-drawing-app",
+  "version": "1.0.0",
+  "description": "A simple multiplayer drawing app where players can create or join rooms with a shared canvas.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.0"
+  },
+  "engines": {
+    "node": "14.x"
+  }
+}
