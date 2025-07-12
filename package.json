@@ -1,16 +1,34 @@
 {
-  "name": "multiplayer-drawing-app",
-  "version": "1.0.0",
-  "description": "A simple multiplayer drawing app where players can create or join rooms with a shared canvas.",
+  "name": "pixeldraw-collaborative-canvas",
+  "version": "2.0.0",
+  "description": "Real-time multiplayer drawing application with advanced brush system, undo/redo functionality, and cyberpunk aesthetic",
   "main": "server.js",
+  "keywords": [
+    "drawing",
+    "multiplayer",
+    "canvas",
+    "real-time",
+    "collaborative",
+    "websocket",
+    "socket.io",
+    "brush",
+    "art"
+  ],
+  "author": "Jackson Alvarez <https://github.com/jacksonalvarez>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jacksonalvarez/pixeldraw.git"
+  },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^4.0.0"
   },
   "engines": {
-    "node": "14.x"
+    "node": ">=18.0.0"
   }
 }

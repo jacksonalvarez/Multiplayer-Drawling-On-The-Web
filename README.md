@@ -1,13 +1,54 @@
-# Multiplayer Drawing App
+# PixelDraw - Collaborative Drawing Canvas
 
-This is a simple multiplayer drawing app where players can create or join rooms with a shared canvas and draw together in real-time.
+🎨 **Real-time multiplayer drawing application with advanced brush system and undo/redo functionality.**
 
-## Setup
+![Demo](https://img.shields.io/badge/Status-Live-brightgreen)
+![Node.js](https://img.shields.io/badge/Node.js-18+-green)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-4.0+-blue)
 
-1. Clone the repository.
-2. Run `npm install` to install dependencies.
-3. Start the server with `npm start`.
-4. Open your browser and navigate to `http://localhost:3000`.
+## ✨ Features
+
+- **Real-time Collaboration**: Draw with multiple users simultaneously
+- **Advanced Brush System**: 5 unique brush types with customizable settings
+  - 🟩 Square Brush - Classic pixel art style
+  - ⚪ Circle Brush - Smooth round strokes
+  - 🌟 Spray Brush - Scattered dot effects
+  - ✨ Neon Brush - Glowing cyberpunk effects
+  - 🗑️ Eraser - Remove content precisely
+- **Undo/Redo System**: Complete stroke-based history (up to 10 actions)
+- **Room Management**: Create public or password-protected rooms
+- **Auto-cleanup**: Rooms expire after 3 days of inactivity
+- **Responsive Design**: Works on desktop and mobile devices
+- **Cyberpunk Aesthetic**: Custom font and glowing effects
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ installed
+- NPM or Yarn package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/jacksonalvarez/pixeldraw.git
+   cd pixeldraw
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the server**
+   ```bash
+   npm start
+   # or
+   node server.js
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:3000`
 
 ## Deployment on DigitalOcean
 
@@ -38,17 +79,26 @@ To host this application for free on DigitalOcean, follow these steps:
    - Use a process manager like PM2 to keep your Node.js app running: `npm install -g pm2`
    - Start your app with PM2: `pm2 start server.js`
 
+## Troubleshooting
+
+- **Server Not Accessible**: If you cannot access the server from your browser, ensure the following:
+  - The server is listening on all network interfaces by using `0.0.0.0` in the server listen method.
+  - Your firewall settings on DigitalOcean allow traffic on port 3000. You can configure this in the "Networking" section of your Droplet settings.
+  - Ensure that your client-side code is pointing to the correct IP address and port of your Droplet.
+
+## Which IP to Use
+
+- **IPv4 Address**: Use the public IPv4 address of your Droplet to connect from external networks. This is the address you should use in your client-side code and when accessing the app from a browser.
+- **Private IP**: This is used for internal communication between Droplets in the same data center and is not accessible from the internet.
+- **Reserved IP**: If you have set up a reserved IP, you can use it as a stable IP address that can be reassigned to different Droplets.
+
 ## How to Use
 
 - Enter a room name and click "Create/Join Room" to start or join a drawing session.
 - Draw on the canvas and see other players' drawings in real-time.
 - View available rooms and join by clicking on them.
 - When joining a room, see all previous drawings.
-
-## Troubleshooting
-
-- Ensure your server is listening on all network interfaces by using `0.0.0.0` in the server listen method.
-- Make sure your firewall settings on DigitalOcean allow traffic on port 3000.
+- **New Feature**: All available rooms are now displayed upon loading the page, allowing you to join any room immediately.
 
 ## Technologies Used
 

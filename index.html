@@ -1,23 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiplayer Drawing App</title>
+    <title>PixelDraw - Multiplayer Drawing Canvas</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+    <style>
+        /* Improved undo/redo button styling */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0;
+            padding: 8px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-buttons .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+        }
+
+        .action-buttons .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Improved color picker layout */
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-width: 200px;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: rgba(0, 255, 0, 0.6);
+        }
+
+        .color-option.active {
+            border-color: #00ff00;
+            transform: scale(1.15);
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+        }
+
+        /* Add some breathing room around action buttons */
+        .brush-tools>* {
+            margin-bottom: 12px;
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Multiplayer Drawing App</h1>
-        <div class="lobby">
-            <input type="text" id="roomInput" placeholder="Enter room name">
-            <button onclick="createOrJoinRoom()">Create/Join Room</button>
-            <h2>Available Rooms</h2>
-            <ul id="roomList"></ul>
+        <!-- Sidebar Toggle Button -->
+        <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">
+            <span id="toggleIcon">◀</span>
+        </button>
+
+        <!-- Tools Toggle Button -->
+        <button class="tools-toggle" id="toolsToggle" onclick="toggleTools()" title="Toggle tools (Ctrl+T)">
+            <span id="toolsToggleIcon">▶</span>
+        </button>
+
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">🎨</span>
+                <h1>PixelDraw</h1>
+                <p class="subtitle">Multiplayer Drawing Canvas</p>
+                <div class="policy-notice">
+                    <span class="policy-icon">ℹ️</span>
+                    <span class="policy-text">Rooms auto-expire after 3 days of inactivity</span>
+                </div>
+            </div>
         </div>
-        <canvas id="gameCanvas"></canvas>
+
+        <div class="sidebar">
+            <div class="room-form">
+                <input type="text" id="roomInput" class="form-input" placeholder="Enter room name">
+                <input type="password" id="passwordInput" class="form-input" placeholder="Password (optional)">
+                <div class="btn-group">
+                    <button onclick="createRoom()" class="btn btn-primary">Create Room</button>
+                    <button onclick="joinRoom()" class="btn btn-secondary">Join Room</button>
+                </div>
+            </div>
+
+            <div class="rooms-section">
+                <h2>Available Rooms</h2>
+                <ul id="roomList"></ul>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <div class="canvas-wrapper">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+        </div>
+
+        <div class="brush-tools">
+            <div class="tools-header">
+                <h3>🎨 Brush Tools</h3>
+            </div>
+
+            <div class="brush-selector">
+                <div class="brush-option active" data-brush="square" onclick="selectBrush('square')">
+                    <div class="brush-preview square-preview"></div>
+                    <span>Square</span>
+                </div>
+                <div class="brush-option" data-brush="circle" onclick="selectBrush('circle')">
+                    <div class="brush-preview circle-preview"></div>
+                    <span>Circle</span>
+                </div>
+                <div class="brush-option" data-brush="spray" onclick="selectBrush('spray')">
+                    <div class="brush-preview spray-preview"></div>
+                    <span>Spray</span>
+                </div>
+                <div class="brush-option" data-brush="neon" onclick="selectBrush('neon')">
+                    <div class="brush-preview neon-preview"></div>
+                    <span>Neon</span>
+                </div>
+                <div class="brush-option" data-brush="eraser" onclick="selectBrush('eraser')">
+                    <div class="brush-preview eraser-preview"></div>
+                    <span>Eraser</span>
+                </div>
+            </div>
+
+            <div class="brush-settings">
+                <label for="brushSize">Brush Size:</label>
+                <input type="range" id="brushSize" min="1" max="200" value="2" oninput="updateBrushSize(this.value)">
+                <span id="brushSizeValue">2px</span>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="undoLastAction()" id="undoButton" disabled>
+                    ↶ Undo
+                </button>
+                <button class="btn btn-secondary" onclick="redoLastAction()" id="redoButton" disabled>
+                    ↷ Redo
+                </button>
+            </div>
+
+            <div class="color-picker">
+                <label>Color:</label>
+                <div class="color-options">
+                    <!-- Primary colors -->
+                    <div class="color-option active" data-color="#00ff00" onclick="selectColor('#00ff00')"
+                        style="background: #00ff00;" title="Green"></div>
+                    <div class="color-option" data-color="#ff0000" onclick="selectColor('#ff0000')"
+                        style="background: #ff0000;" title="Red"></div>
+                    <div class="color-option" data-color="#0000ff" onclick="selectColor('#0000ff')"
+                        style="background: #0000ff;" title="Blue"></div>
+
+                    <!-- Secondary colors -->
+                    <div class="color-option" data-color="#ffff00" onclick="selectColor('#ffff00')"
+                        style="background: #ffff00;" title="Yellow"></div>
+                    <div class="color-option" data-color="#ff00ff" onclick="selectColor('#ff00ff')"
+                        style="background: #ff00ff;" title="Magenta"></div>
+                    <div class="color-option" data-color="#00ffff" onclick="selectColor('#00ffff')"
+                        style="background: #00ffff;" title="Cyan"></div>
+
+                    <!-- Additional vibrant colors -->
+                    <div class="color-option" data-color="#ff6600" onclick="selectColor('#ff6600')"
+                        style="background: #ff6600;" title="Orange"></div>
+                    <div class="color-option" data-color="#9933ff" onclick="selectColor('#9933ff')"
+                        style="background: #9933ff;" title="Purple"></div>
+                    <div class="color-option" data-color="#33ff99" onclick="selectColor('#33ff99')"
+                        style="background: #33ff99;" title="Mint"></div>
+                    <div class="color-option" data-color="#ff3366" onclick="selectColor('#ff3366')"
+                        style="background: #ff3366;" title="Pink"></div>
+
+                    <!-- Neutral colors -->
+                    <div class="color-option" data-color="#ffffff" onclick="selectColor('#ffffff')"
+                        style="background: #ffffff;" title="White"></div>
+                    <div class="color-option" data-color="#888888" onclick="selectColor('#888888')"
+                        style="background: #888888;" title="Gray"></div>
+                    <div class="color-option" data-color="#000000" onclick="selectColor('#000000')"
+                        style="background: #000000;" title="Black"></div>
+
+                    <!-- Glow/Neon colors -->
+                    <div class="color-option" data-color="#00ff88" onclick="selectColor('#00ff88')"
+                        style="background: #00ff88;" title="Neon Green"></div>
+                    <div class="color-option" data-color="#ff0088" onclick="selectColor('#ff0088')"
+                        style="background: #ff0088;" title="Neon Pink"></div>
+                    <div class="color-option" data-color="#8800ff" onclick="selectColor('#8800ff')"
+                        style="background: #8800ff;" title="Electric Purple"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="connection-status">
+                <div class="status-indicator" id="connectionIndicator"></div>
+                <span id="connectionText">Connected</span>
+            </div>
+            <div class="current-room">
+                Room: <span id="currentRoomName">None</span>
+            </div>
+        </div>
     </div>
+
+    <!-- Password Modal -->
+    <div class="modal-overlay" id="passwordModal" style="display: none;">
+        <div class="modal">
+            <h3>Enter Password</h3>
+            <p>This room is password protected. Please enter the password to join:</p>
+            <input type="password" class="modal-input" id="modalPasswordInput" placeholder="Enter password">
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closePasswordModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitPassword()">Join Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span class="footer-title">PixelDraw</span>
+                <span class="footer-subtitle">Collaborative Drawing Canvas</span>
+            </div>
+            <div class="footer-center">
+                <div class="github-link">
+                    <span class="github-icon">🚀</span>
+                    <span>Created by</span>
+                    <a href="https://github.com/jacksonalvarez" target="_blank"
+                        rel="noopener noreferrer">@jacksonalvarez</a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-date">Last updated: 7/12/25</div>
+                <div class="footer-copyright">© 2025 Jackson Alvarez. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script src="client.js"></script>
 </body>
+
 </html>
