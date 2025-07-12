@@ -1,6 +1,7 @@
-// Auto-detect if running locally or on production
+// Auto-detect if running locally or on production with proper protocol
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const serverUrl = isLocal ? 'http://localhost:3000' : 'http://157.230.212.21:3000';
+const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+const serverUrl = isLocal ? 'http://localhost:3000' : `${protocol}//${window.location.host}`;
 const socket = io(serverUrl);
 console.log('Connecting to:', serverUrl);
 const canvas = document.getElementById('gameCanvas');
